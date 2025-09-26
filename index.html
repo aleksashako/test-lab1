@@ -33,6 +33,17 @@
         <section id="content" style="display: none;"></section>
     </main>
 
+    <div id="fav-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleFavModal()">&times;</span>
+            <h2>Your Favorites</h2>
+            <div id="fav-items">
+                <!-- Содержимое избранного будет сгенерировано через JS -->
+                <p>You haven't added any items to favorites yet.</p>
+            </div>
+        </div>
+    </div>
+
     <div id="cart-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="toggleCartModal()">&times;</span>

@@ -328,7 +328,7 @@ function toggleFavModal() {
 }
 
 function toggleCartModal() {
-    const modal = document.getElementById('cart-modal');
+    let modal = document.getElementById('cart-modal');
     if (modal.style.display === 'block') {
         modal.style.display = 'none';
     } else {
@@ -354,24 +354,18 @@ function closeOrderSuccessModal() {
     document.getElementById('order-success-modal').style.display = 'none';
 }
 
-// Order placement
 function placeOrder() {
-    // In a real application, you would send the order data to a server here
     document.getElementById('checkout-modal').style.display = 'none';
     
-    // Clear the cart
     cart = [];
     saveCartToStorage();
     updateCartUI();
     
-    // Reset the form
     document.getElementById('checkout-form').reset();
     
-    // Show success message
     document.getElementById('order-success-modal').style.display = 'block';
 }
 
-// Navigation functions (from your original code, slightly modified)
 function changeContent(page) {
     const startContent = document.getElementById('startContent');
     const contentDiv = document.getElementById('content');

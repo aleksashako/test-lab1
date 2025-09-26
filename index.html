@@ -1,63 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>my test online shop</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ugly things store</title>
     <link rel="stylesheet" href="style.css">
-</head> 
+</head>
 <body>
     <header>
         <div class="menu">
-            <button class="fav">&#10084;</button>
-            <button class="cart">&#128722;</button>
+            <button class="fav" aria-label="Open Favorites">&#10084;</button>
+            <button class="cart" aria-label="Open Cart" onclick="toggleCartModal()">&#128722; <span id="cart-count">0</span></button>
         </div>
-        <h1>Ugly things store TEST</h1>
-        <h4>ugly doesn't mean unwanted</h4>
+        <h1>Ugly things store</h1>
+        <p>ugly doesn't mean unwanted</p>
     </header>
+
     <nav> 
         <ul class="navigation">
-            <li><a href="javascript:void(0)" onclick=
-                "changeContent('store')">[about store]</a></li>
-            <li><a href="javascript:void(0)" onclick=
-                "changeContent('new')">[new]</a></li>
-            <li><a href="javascript:void(0)" onclick=
-                "changeContent('catalog')">[catalog]</a></li>
+            <li><a href="javascript:void(0)" onclick="changeContent('store')">[about store]</a></li>
+            <li><a href="javascript:void(0)" onclick="changeContent('new')">[new]</a></li>
+            <li><a href="javascript:void(0)" onclick="changeContent('catalog')">[catalog]</a></li>
   	    </ul>
     </nav>
-    
 
-    <div id="startContent">
-        <p>On this page, you can view the full list of products.</p>
-        <ul class="product-container">
-            <li class="product-card">
-                <div class="pr-image"></div>
-                <div class="pr-info">
-                    <h3 class="title">Ugly 1</h3>
-                    <p class="description">broken vase</p>
-                    <p class="price">not less that 100</p>
-                    <button class="add-to-fav-button" data-id="1">♡</button>
-                    <button class="add-to-cart-button" data-id="1">Add to cart</button>
-            </li>
-            <li class="product-card">
-                <h4>№2</h4></li>
-            <li class="product-card">
-                <h4>№3</h4></li>
-            <li class="product-card">
-                <h4>№4</h4></li>
-            <li class="product-card">
-                <h4>№5</h4></li>
-            <li class="product-card">
-                <h4>№6</h4></li>
-        </ul>
+    <main id="main-content">
+        <section id="startContent">
+            <h2>Our Ugly Collection</h2>
+            <ul class="product-container" id="product-list">
+            </ul>
+        </section>
+        <section id="content" style="display: none;"></section>
+    </main>
 
-        <div class='modal-fav'>
-            <div class="cross-fav">&#10008;</div>
-            <h1>favourites</h1>
-            <p>no fav things yet..</p>
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleCartModal()">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cart-items">
+                <p>Your cart is empty.</p>
+            </div>
+            <div class="cart-total">
+                <strong>Total: $<span id="total-price">0</span></strong>
+            </div>
+            <button onclick="openCheckoutForm()">Proceed to Checkout</button>
         </div>
     </div>
-    <div id="content" style="display: none;"></div>
-    
-    <script src="index.js"></script>  
-</body>   
+
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCheckoutForm()">&times;</span>
+            <h2>Checkout</h2>
+            <form id="checkout-form">
+                <fieldset>
+                    <legend>Your Information</legend>
+                    <label for="name">First Name *</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="surname">Last Name *</label>
+                    <input type="text" id="surname" name="surname" required>
+
+                    <label for="address">Delivery Address *</label>
+                    <input type="text" id="address" name="address" required>
+
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Delivery Method</legend>
+                    <label>
+                        <input type="radio" name="delivery" value="courier" required> Courier
+                    </label>
+                    <label>
+                        <input type="radio" name="delivery" value="pickup"> Pickup
+                    </label>
+                </fieldset>
+
+                <button type="submit">Place Order!</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="order-success-modal" class="modal">
+        <div class="modal-content">
+            <h2>Thank You!</h2>
+            <p>Your order has been placed successfully!</p>
+            <button onclick="closeOrderSuccessModal()">Continue Shopping</button>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
 </html>

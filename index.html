@@ -1,6 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>lab1</title>
-</head>    
+    <title>my first online shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head> 
+<body>
+    <header>
+        <div class="menu">
+            <button class="fav">&#10084;</button>
+            <button class="cart">&#128722;</button>
+        </div>
+        <h1>Ugly things store</h1>
+        <h4>ugly doesn't mean unwanted</h4>
+    </header>
+    <nav> 
+        <ul class="navigation">
+            <li><a href="javascript:void(0)" onclick=
+                "changeContent('store')">[about store]</a></li>
+            <li><a href="javascript:void(0)" onclick=
+                "changeContent('new')">[new]</a></li>
+            <li><a href="javascript:void(0)" onclick=
+                "changeContent('catalog')">[catalog]</a></li>
+  	    </ul>
+    </nav>
+    
+
+    <div id="startContent">
+        <p>On this page, you can view the full list of products.</p>
+        <ul class="product-container">
+            <li class="product-card">
+                <div class="pr-image"></div>
+                <div class="pr-info">
+                    <h3 class="title">Ugly 1</h3>
+                    <p class="description">broken vase</p>
+                    <p class="price">not less that 100</p>
+                    <button class="add-to-fav-button" data-id="1">♡</button>
+                    <button class="add-to-cart-button" data-id="1">Add to cart</button>
+            </li>
+            <li class="product-card">
+                <h4>№2</h4></li>
+            <li class="product-card">
+                <h4>№3</h4></li>
+            <li class="product-card">
+                <h4>№4</h4></li>
+            <li class="product-card">
+                <h4>№5</h4></li>
+            <li class="product-card">
+                <h4>№6</h4></li>
+        </ul>
+
+        <div class='modal-fav'>
+            <div class="cross-fav">&#10008;</div>
+            <h1>favourites</h1>
+            <p>no fav things yet..</p>
+        </div>
+    </div>
+    <div id="content" style="display: none;"></div>
+    
+    <script src="index.js"></script>  
+</body>   
 </html>

@@ -1,0 +1,86 @@
+.body {
+  font-family: Arial, sans-serif; 
+  background-color: #f4f4f4; 
+  padding: 0px;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: right;
+  padding: 20px;
+}
+
+.menu {
+  position: absolute;
+  right: 5%;
+  top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.menu button {
+  background-color: #f4f4f4;
+  color: black;
+  border: none;
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+}
+
+.navigation {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  
+  list-style: none;
+  margin: 0; 
+  background: deepskyblue;
+}
+
+.navigation a {
+  text-decoration: none;
+  display: block;
+  padding: 1em;
+  color: white;
+}
+
+.navigation a:hover {
+  background: #1565C0;
+}
+
+.product-container {
+  display: flex; 
+  flex-flow: row wrap; 
+  gap: 20px; 
+  justify-content: center; 
+  align-content: stretch;
+}
+
+.product-card {
+  background-color: white;
+  border-radius: 8px; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  width: 300px; 
+  overflow: hidden; 
+}
+
+.modal-fav {
+  display: none;
+  justify-content: center;
+  width: 350px;
+  height: 260px;
+  background: orange;
+  padding: 10px;
+  position: relative;
+}
+
+.cross-fav {
+  position: absolute;
+  right: -5%;
+  height: -10%;
+  cursor: pointer;
+  font-size: 20pt
+}
+
+

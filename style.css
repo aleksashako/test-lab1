@@ -65,22 +65,51 @@
   overflow: hidden; 
 }
 
-.modal-fav {
-  display: none;
-  justify-content: center;
-  width: 350px;
-  height: 260px;
-  background: orange;
-  padding: 10px;
-  position: relative;
-}
-
 .cross-fav {
   position: absolute;
   right: -5%;
   height: -10%;
   cursor: pointer;
   font-size: 20pt
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: none;
+}
+
+.modal-fav {
+    display: none;
+    flex-direction: column;
+    width: 350px;
+    height: 260px;
+    background: orange;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalAppear 0.3s ease;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 

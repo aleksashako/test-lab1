@@ -1,3 +1,4 @@
+// Data: Array of products
 const products = [
     {
         id: 1,
@@ -43,12 +44,18 @@ const products = [
     }
 ];
 
+// Cart state
 let cart = [];
+// Favorites state
+let favorites = [];
 
+// DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     renderProducts();
     loadCartFromStorage();
+    loadFavoritesFromStorage();
     updateCartUI();
+    updateFavUI();
     
     // Event listener for checkout form submission
     document.getElementById('checkout-form').addEventListener('submit', function(e) {
@@ -57,11 +64,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Render products to the page
 function renderProducts() {
     const productList = document.getElementById('product-list');
     productList.innerHTML = '';
     
     products.forEach(product => {
+        const isFavorited = favorites.some(fav => fav.id === product.id);
+        const favoriteClass = isFavorited ? 'active' : '';
+        const favoriteSymbol = isFavorited ? '♥' : '♡';
+        
         const productCard = document.createElement('li');
         productCard.className = 'product-card';
         productCard.innerHTML = `
@@ -70,21 +82,136 @@ function renderProducts() {
                 <h3 class="title">${product.title}</h3>
                 <p class="description">${product.description}</p>
                 <p class="price">$${product.price}</p>
-                <button class="add-to-fav-button" data-id="${product.id}">♡</button>
+                <button class="add-to-fav-button ${favoriteClass}" data-id="${product.id}">${favoriteSymbol}</button>
                 <button class="add-to-cart-button" data-id="${product.id}">Add to cart</button>
             </div>
         `;
         productList.appendChild(productCard);
     });
     
+    // Add event listeners to "Add to cart" buttons
     document.querySelectorAll('.add-to-cart-button').forEach(button => {
         button.addEventListener('click', function() {
             const productId = parseInt(this.getAttribute('data-id'));
             addToCart(productId);
         });
     });
+    
+    // Add event listeners to "Add to favorites" buttons
+    document.querySelectorAll('.add-to-fav-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = parseInt(this.getAttribute('data-id'));
+            toggleFavorite(productId);
+        });
+    });
 }
 
+// Favorites functions
+function toggleFavorite(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    const existingIndex = favorites.findIndex(fav => fav.id === productId);
+    const favButton = document.querySelector(`.add-to-fav-button[data-id="${productId}"]`);
+    
+    if (existingIndex !== -1) {
+        // Remove from favorites
+        favorites.splice(existingIndex, 1);
+        favButton.innerHTML = '♡';
+        favButton.classList.remove('active');
+    } else {
+        // Add to favorites
+        favorites.push({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            description: product.description
+        });
+        favButton.innerHTML = '♥';
+        favButton.classList.add('active');
+    }
+    
+    saveFavoritesToStorage();
+    updateFavUI();
+    
+    // Provide visual feedback
+    const originalBackground = favButton.style.backgroundColor;
+    favButton.style.backgroundColor = '#ff6b6b';
+    favButton.style.color = 'white';
+    
+    setTimeout(() => {
+        favButton.style.backgroundColor = originalBackground;
+        if (existingIndex !== -1) {
+            favButton.style.color = '';
+        }
+    }, 300);
+}
+
+function removeFromFavorites(productId) {
+    favorites = favorites.filter(fav => fav.id !== productId);
+    saveFavoritesToStorage();
+    updateFavUI();
+    
+    // Update the favorite button in the product list
+    const favButton = document.querySelector(`.add-to-fav-button[data-id="${productId}"]`);
+    if (favButton) {
+        favButton.innerHTML = '♡';
+        favButton.classList.remove('active');
+    }
+}
+
+function moveFavoriteToCart(productId) {
+    addToCart(productId);
+    
+    // Optional: remove from favorites after adding to cart
+    // removeFromFavorites(productId);
+}
+
+function saveFavoritesToStorage() {
+    localStorage.setItem('uglyThingsFavorites', JSON.stringify(favorites));
+}
+
+function loadFavoritesFromStorage() {
+    const savedFavorites = localStorage.getItem('uglyThingsFavorites');
+    if (savedFavorites) {
+        favorites = JSON.parse(savedFavorites);
+    }
+}
+
+function updateFavUI() {
+    const favCount = document.getElementById('fav-count');
+    const favItems = document.getElementById('fav-items');
+    
+    // Update favorites count
+    favCount.textContent = favorites.length;
+    
+    // Update favorites items display
+    if (favorites.length === 0) {
+        favItems.innerHTML = '<div class="empty-state"><p>You haven\'t added any items to favorites yet.</p></div>';
+        return;
+    }
+    
+    favItems.innerHTML = '';
+    favorites.forEach(item => {
+        const favItemElement = document.createElement('div');
+        favItemElement.className = 'fav-item';
+        favItemElement.innerHTML = `
+            <div class="fav-item-info">
+                <h4>${item.title}</h4>
+                <p>$${item.price}</p>
+                <p class="description">${item.description}</p>
+            </div>
+            <div class="fav-item-controls">
+                <button class="move-to-cart-btn" onclick="moveFavoriteToCart(${item.id})">Add to Cart</button>
+                <button class="remove-fav-btn" onclick="removeFromFavorites(${item.id})">Remove</button>
+            </div>
+        `;
+        favItems.appendChild(favItemElement);
+    });
+}
+
+// Cart functions (остаются без изменений, но добавляем вызов updateFavUI где нужно)
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
@@ -105,6 +232,7 @@ function addToCart(productId) {
     saveCartToStorage();
     updateCartUI();
     
+    // Provide visual feedback
     const button = document.querySelector(`.add-to-cart-button[data-id="${productId}"]`);
     const originalText = button.textContent;
     button.textContent = 'Added!';
@@ -156,13 +284,16 @@ function updateCartUI() {
     const totalPrice = document.getElementById('total-price');
     const cartItems = document.getElementById('cart-items');
     
+    // Update cart count
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCount.textContent = totalItems;
     
+    // Update total price
     totalPrice.textContent = calculateTotal().toFixed(2);
     
+    // Update cart items display
     if (cart.length === 0) {
-        cartItems.innerHTML = '<p>Your cart is empty.</p>';
+        cartItems.innerHTML = '<div class="empty-state"><p>Your cart is empty.</p></div>';
         return;
     }
     
@@ -184,6 +315,16 @@ function updateCartUI() {
         `;
         cartItems.appendChild(cartItemElement);
     });
+}
+
+// Modal functions (добавляем функцию для избранного)
+function toggleFavModal() {
+    const modal = document.getElementById('fav-modal');
+    if (modal.style.display === 'block') {
+        modal.style.display = 'none';
+    } else {
+        modal.style.display = 'block';
+    }
 }
 
 function toggleCartModal() {
@@ -213,18 +354,24 @@ function closeOrderSuccessModal() {
     document.getElementById('order-success-modal').style.display = 'none';
 }
 
+// Order placement
 function placeOrder() {
+    // In a real application, you would send the order data to a server here
     document.getElementById('checkout-modal').style.display = 'none';
     
+    // Clear the cart
     cart = [];
     saveCartToStorage();
     updateCartUI();
     
+    // Reset the form
     document.getElementById('checkout-form').reset();
     
+    // Show success message
     document.getElementById('order-success-modal').style.display = 'block';
 }
 
+// Navigation functions (from your original code, slightly modified)
 function changeContent(page) {
     const startContent = document.getElementById('startContent');
     const contentDiv = document.getElementById('content');
@@ -262,6 +409,7 @@ function goBackToStart() {
     startContent.style.display = 'block';
 }
 
+// Close modals when clicking outside
 window.onclick = function(event) {
     const modals = document.getElementsByClassName('modal');
     for (let modal of modals) {

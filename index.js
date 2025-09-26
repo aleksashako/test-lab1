@@ -328,7 +328,7 @@ function toggleFavModal() {
 }
 
 function toggleCartModal() {
-    let modal = document.getElementById('cart-modal');
+    const modal = document.getElementById('cart-modal');
     if (modal.style.display === 'block') {
         modal.style.display = 'none';
     } else {

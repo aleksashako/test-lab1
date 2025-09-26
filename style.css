@@ -296,6 +296,75 @@ button[type="submit"]:hover {
     background-color: #3aa35c;
 }
 
+.fav-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.fav-item-info {
+    flex-grow: 1;
+}
+
+.fav-item-info h4 {
+    margin-bottom: 5px;
+}
+
+.fav-item-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.move-to-cart-btn {
+    background-color: #47cf73;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.remove-fav-btn {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.add-to-fav-button.active {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments for favorites */
+@media (max-width: 768px) {
+    .fav-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .fav-item-controls {
+        align-self: flex-end;
+        margin-top: 10px;
+    }
+}
+
 @media (max-width: 768px) {
     .menu {
         position: static;
